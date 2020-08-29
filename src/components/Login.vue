@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import Cookies from 'cookies'
 import axios from 'axios'
 import {apiurl} from '@/api'
 
@@ -42,25 +41,27 @@ export default {
   data: () => ({
     dialog: true,
     username: '',
-    step: '',
-    salt: '',
     rule: [value => !!value || '用户名不能为空',]
   }),
   methods: {
     login: function () {
       var that = this
-      axios.get(apiurl, {
+      axios.get(apiurl+'/login', {
         params: {
           'username': this.username
         }
       }).then(function (resp) {
         let data = resp.data
-        that.step = data['data']['step']
-        that.salt = data['data']['salt']
+        let step = data['data']['step']
+        let salt = data['data']['salt']
+        that.$cookies.set('user', that.username, '365d')
+        that.$cookies.set('step', step, '365d')
+        that.$cookies.set('salt', salt, '365d')
+        that.$bus.$emit('showSnackbar',['登陆成功','success'])
+        that.$emit('login')
+      }).catch(function () {
+        that.$bus.$emit('showSnackbar',['后端服务器出错','error'])
       })
-      Cookies.set('user', this.username, {signed: true, maxAge: 0})
-      Cookies.set('step', this.step, {signed: true, maxAge: 0})
-      Cookies.set('salt', this.salt, {signed: true, maxAge: 0})
     }
   }
 }
