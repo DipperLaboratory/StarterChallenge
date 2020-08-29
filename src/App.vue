@@ -11,16 +11,7 @@
       <v-toolbar-title class="font-weight-light">
         <span class="font-weight-bold">Starter</span>Challenge
       </v-toolbar-title>
-
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/DipperLaboratory/"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">DipperLaboratory</span>
-      </v-btn>
     </v-app-bar>
     <v-main>
       <v-snackbar
@@ -41,15 +32,33 @@
           </v-btn>
         </template>
       </v-snackbar>
+      <v-slide-y-transition mode="out-in">
       <template v-if="isLogout">
         <login
+            key="1"
             v-on:login="login"
         />
       </template>
-      <template v-else-if="isWelcome">
-        <Welcome/>
+      <template v-if="isStepOne&&isWelcome">
+        <Welcome
+            key="2"
+            v-on:challenge="isWelcome=false"
+        />
       </template>
+      <template v-else>
+        <Challenge
+            key="1"
+        />
+      </template>
+      </v-slide-y-transition>
     </v-main>
+    <v-footer
+        app
+    >
+      <v-btn text @click="jumpToClub"><span class="font-weight-bold">Dipper</span>Laboratory</v-btn>
+      <v-spacer></v-spacer>
+      <span>&copy; {{ new Date().getFullYear() }}</span>
+    </v-footer>
   </v-app>
 </template>
 
@@ -58,9 +67,10 @@
 
 import Login from "@/components/Login";
 import Welcome from "@/components/Welcome";
+import Challenge from "@/components/Challenge";
 export default {
   name: 'App',
-  components: {Welcome, Login},
+  components: {Challenge, Welcome, Login},
   created() {
     if(this.checkCookie()){
       this.login()
@@ -75,14 +85,18 @@ export default {
     isLogout:true,
     snackbarBool:false,
     snackbarMessage:'',
-    snackbarColor:''
+    snackbarColor:'',
+    isWelcome:true,
   }),
   computed:{
-    isWelcome:function () {
+    isStepOne:function () {
       return this.step==="1"
     }
   },
   methods:{
+    jumpToClub:function (){
+      window.open('https://github.com/DipperLaboratory/','_blank')
+    },
     showSnackbar:function (arg){
       this.snackbarMessage=arg[0]
       this.snackbarColor=arg[1]
