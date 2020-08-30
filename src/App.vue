@@ -39,7 +39,7 @@
             v-on:login="login"
         />
       </template>
-      <template v-if="isStepOne&&isWelcome">
+      <template v-else-if="isStepOne&&isWelcome">
         <Welcome
             key="2"
             v-on:challenge="isWelcome=false"
@@ -47,7 +47,7 @@
       </template>
       <template v-else>
         <Challenge
-            key="1"
+            key="3"
         />
       </template>
       </v-slide-y-transition>
