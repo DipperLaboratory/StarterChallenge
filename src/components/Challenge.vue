@@ -351,7 +351,7 @@
         color="grey"
     >mdi-gift-outline
     </v-icon>
-    <h1> 祝贺!</h1>
+    <h1>{{username}}，祝贺你!</h1>
 
     <div
         class="my-4"
@@ -437,7 +437,7 @@ export default {
         let step = data['data']['step']
         let salt = data['data']['salt']
         if(parseInt(that.step)===step){
-          that.$bus.$emit('showSnackbar', ['验证成功', 'info'])
+          that.$bus.$emit('showSnackbar', ['刷新状态成功', 'info'])
         }
         else{
           that.step = step
