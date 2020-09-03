@@ -13,6 +13,8 @@
                   label="用户名"
                   v-model="username"
                   :rules="rule"
+                  hint="用户名是您在此挑战中验证身份的唯一凭据"
+                  persistent-hint
                   @keydown.enter="login"
               />
             </v-col>
