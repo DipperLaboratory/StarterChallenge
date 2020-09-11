@@ -47,6 +47,10 @@ export default {
   }),
   methods: {
     login: function () {
+      if (!this.$refs.user.validate()) {
+        this.$bus.$emit('showSnackbar',['用户名不能为空','error'])
+        return
+      }
       var that = this
       axios.get(apiurl+'/login', {
         params: {
