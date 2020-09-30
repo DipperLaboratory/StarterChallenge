@@ -35,16 +35,21 @@
       <v-slide-y-transition mode="out-in">
         <template v-if="mobile">
           <v-container
-              style="height: 60vh"
               class="d-flex flex-column justify-center align-center text-center pa-9 mx-auto mt-12"
           >
             <v-img
                 :src="require('@/assets/cry.png')"
                 contain
             />
-            <h1 class="mb-4">别看了，移动端没做</h1>
+            <h1 class="mt-4 mb-4">别看了，移动端没做</h1>
             <p>懒得设计排版了，这个网页只有PC端。</p>
             <p>请在电脑上打开这个网页。</p>
+            <p>扫描下面的二维码联系我们</p>
+            <v-img
+                contain
+                :src="require('@/assets/qr.png')"
+                max-width="50vw"
+            />
           </v-container>
         </template>
         <template v-else-if="isLogout">
