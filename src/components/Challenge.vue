@@ -207,6 +207,8 @@
               <p>大量公司为大学生提供了各种各样的教育服务。</p>
               <p>教育邮箱是最常见的验证方式。</p>
               <p>在各位入学之时，学校已经为各位开通了教育邮箱，激活它吧。</p>
+              <p>你也可以使用此邮箱直接加入北斗之芯的 GitHub 组织，请访问 <a href="https://reg.jgsu.xyz" target="_blank">Self Reg</a> 。</p>
+              <p></p>
               <h3>挑战</h3>
               <p>完成本校教育邮箱账号的激活，并使用 <a href="http://mail.jgsu.edu.cn/" target="_blank">邮件系统</a> 接收激活链接来完成挑战。</p>
               <h3>格式</h3>
@@ -244,7 +246,7 @@
                           ref="c4input"
                           label="本校教育邮箱"
                           v-model="eduemail"
-                          :rules="rules.c1"
+                          :rules="rules.c4"
                           @keydown.enter="c4Submit"
                       />
                     </v-col>
@@ -351,7 +353,7 @@
         color="grey"
     >mdi-gift-outline
     </v-icon>
-    <h1>{{username}}，祝贺你!</h1>
+    <h1>{{ username }}，祝贺你!</h1>
 
     <div
         class="my-4"
@@ -360,7 +362,7 @@
       <p>祝贺你完成了挑战</p>
       <p>请保存好下面的 salt。</p>
       <p>凭 salt 可获得小礼品一份。</p>
-      <p class="headline"><kbd>{{salt}}</kbd></p>
+      <p class="headline"><kbd>{{ salt }}</kbd></p>
       <p><strong>PS:</strong> 如果您不是通过完成测试抵达这个页面，请联系 @Zxilly 叙述您的方案并获取额外奖品。</p>
     </div>
   </v-container>
@@ -393,19 +395,34 @@ export default {
         value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(value) || '无效电子邮件地址'
+        },
+        value => {
+          const pattern = /@gmail.com$/
+          return pattern.test(value) || '邮箱应以 @gmail.com 结尾'
         }],
       c2: [
         value => !!value || '必填',
         value => {
           return parseInt(value) === Math.round(value) && value > 0 || '输入应为一个正整数'
-        }]
+        }],
+      c4: [
+        value => !!value || '必填',
+        value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || '无效电子邮件地址'
+        },
+        value => {
+          const pattern = /@jgsu.edu.cn$/
+          return pattern.test(value) || '邮箱应以 @jgsu.edu.cn 结尾'
+        }
+      ]
     }
   }),
   created() {
     this.step = this.$cookies.get('step')
   },
   computed: {
-    salt:function () {
+    salt: function () {
       return this.$cookies.get('salt')
     },
     progress: function () {
@@ -415,7 +432,7 @@ export default {
       return this.$cookies.get('user')
     },
     c2salt: {
-      cache:false,
+      cache: false,
       get: function () {
         //console.log(this.$cookies.get('salt'))
         return this.$md5(this.$cookies.get('salt') + 'gyo1O@=K`e|+pIoah-/ (fJ@=]+7<gdoKA*NS|DvD<D&cmhH4@F{W+N/-xmL`}6/')
@@ -436,10 +453,9 @@ export default {
         let data = resp.data
         let step = data['data']['step']
         let salt = data['data']['salt']
-        if(parseInt(that.step)===step){
-          that.$bus.$emit('showSnackbar', ['刷新状态成功', 'info'])
-        }
-        else{
+        if (parseInt(that.step) === step) {
+          that.$bus.$emit('showSnackbar', ['验证失败', 'error'])
+        } else {
           that.step = step
           that.$cookies.set('user', that.username, '365d')
           that.$cookies.set('step', step, '365d')
@@ -576,5 +592,9 @@ h3 {
 small {
   font-size: 1rem;
   margin-top: 5px;
+}
+
+blockquote {
+  margin-right: 24px;
 }
 </style>

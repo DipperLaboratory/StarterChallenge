@@ -43,16 +43,19 @@ export default {
   data: () => ({
     dialog: true,
     username: '',
-    rule: [value => !!value || '用户名不能为空',]
+    rule: [value => !!value || '用户名不能为空', value => {
+      let re = /^[A-Za-z0-9]*$/;
+      return re.test(value) || "请使用英文字母和数字的组合"
+    }]
   }),
   methods: {
     login: function () {
       if (!this.$refs.user.validate()) {
-        this.$bus.$emit('showSnackbar',['用户名不能为空','error'])
+        this.$bus.$emit('showSnackbar', ['用户名不合法', 'error'])
         return
       }
-      var that = this
-      axios.get(apiurl+'/login', {
+      const that = this;
+      axios.get(apiurl + '/login', {
         params: {
           'username': this.username
         }
@@ -63,10 +66,10 @@ export default {
         that.$cookies.set('user', that.username, '365d')
         that.$cookies.set('step', step, '365d')
         that.$cookies.set('salt', salt, '365d')
-        that.$bus.$emit('showSnackbar',['登陆成功','success'])
+        that.$bus.$emit('showSnackbar', ['登陆成功', 'success'])
         that.$emit('login')
       }).catch(function () {
-        that.$bus.$emit('showSnackbar',['后端服务器出错','error'])
+        that.$bus.$emit('showSnackbar', ['后端服务器出错', 'error'])
       })
     }
   }

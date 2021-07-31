@@ -1,1 +1,1 @@
-export const apiurl = 'https://api.startcoder.top';
+export const apiurl = 'https://api.jgsu.xyz';

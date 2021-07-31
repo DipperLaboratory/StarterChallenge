@@ -9,11 +9,11 @@ Vue.use(VueCookies)
 
 Vue.config.productionTip = false
 
-Vue.prototype.$bus=new Vue()
+Vue.prototype.$bus = new Vue()
 Vue.prototype.$md5 = md5;
 
 new Vue({
-  el:'#app',
-  vuetify,
-  render: h => h(App)
+    el: '#app',
+    vuetify,
+    render: h => h(App)
 })
